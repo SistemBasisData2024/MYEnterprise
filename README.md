@@ -1,10 +1,16 @@
 # MYEnterprise
 
-The "MYEnterprise" project is an implementation of a business management system aimed at simplifying the process of managing invoices and customers. The system consists of two main components: `fetchCardData` and `fetchCustomers`.
+The "MYEnterprise" project is an Enterprise Resource Planning (ERP) application designed to help organizations manage their resources and daily operations. The system consists of four main features:
 
-The `fetchCardData` function is responsible for fetching data related to invoices and customers from the database. It fetches the total number of invoices, the total number of customers, the total amount of paid invoices, and the total amount of pending invoices.
+1. **Project Management**: This feature will provide tools to plan, organize, and manage resource tools and develop resource estimates.
 
-The `fetchCustomers` function is responsible for fetching all customers from the database. It fetches the id and name of each customer.
+2. **Customer Relationship Management (CRM)**: This feature will handle the organization's interaction with its customers. It will use data analysis about customers' history to improve business relationships.
+
+3. **Human Resource Management System (HRMS)**: This feature will manage and optimize the daily human resource tasks and overall HR goals and strategic objectives.
+
+4. **Inventory Management System (IMS)**: This feature will oversee the flow of items into and out of your stock. It will manage everything from production to stock, to sales, and is a crucial part of the supply chain.
+
+Each feature will have its own set of functionalities that will be developed and integrated into the system. The application aims to streamline business processes, increase efficiency, and enable data-driven decisions.
 
 # 💻 Tech Stack:
 
