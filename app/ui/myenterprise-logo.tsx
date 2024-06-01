@@ -6,7 +6,7 @@ export default function MYEnterpriseLogo() {
     <div
       className={`${lusitana.className} flex flex-row items-center leading-none text-white`}
     >
-      <BuildingOffice2Icon className="h-12 w-12 rotate-[15deg]" />
+      <BuildingOffice2Icon className="h-12 w-12" />
       <p className="text-[44px]">MYEnterprise</p>
     </div>
   );
