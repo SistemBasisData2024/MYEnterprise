@@ -1,8 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# MYEnterprise
 
-## Getting Started
+The "MYEnterprise" project is an implementation of a business management system aimed at simplifying the process of managing invoices and customers. The system consists of two main components: `fetchCardData` and `fetchCustomers`.
 
-First, run the development server:
+The `fetchCardData` function is responsible for fetching data related to invoices and customers from the database. It fetches the total number of invoices, the total number of customers, the total amount of paid invoices, and the total amount of pending invoices.
+
+The `fetchCustomers` function is responsible for fetching all customers from the database. It fetches the id and name of each customer.
+
+# 💻 Tech Stack:
+
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+
+# :bar_chart: Diagram
+
+UML
+
+<!-- Insert UML Diagram Here -->
+
+ERD
+
+<!-- Insert ERD Diagram Here -->
+
+Flowchart
+
+<!-- Insert Flowchart Here -->
+
+# :computer: Installation Guide
+
+Clone this repository
+
+```
+git clone https://github.com/SistemBasisData2024/MYEnterprise.git
+```
+
+## Backend
+
+- Ensure You’re on the right folder
+
+- Run npm install to install all dependencies
+
+```
+npm install
+```
+
+- Create an .env file in your project root folder and add your variables.
+
+- Insert Database Variables
+
+- To test the installation result run
 
 ```bash
 npm run dev
@@ -14,23 +58,8 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000) with your browser to start running the app locally.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# 💻 Progress Report:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<!-- Insert Progress Report Here -->
