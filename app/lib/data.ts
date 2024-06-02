@@ -87,7 +87,7 @@ export async function fetchFilteredInvoices(
   query: string,
   currentPage: number
 ) {
-  noStore(); //Add noStore for dynamic rendering - Chapter 8
+  noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
