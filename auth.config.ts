@@ -1,14 +1,14 @@
-import type { NextAuthConfig } from 'next-auth';
+import type { NextAuthConfig } from "next-auth";
 
 export const authConfig = {
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-      const isOnRoot = nextUrl.pathname === '/';
+      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+      const isOnRoot = nextUrl.pathname === "/";
 
       if (isOnRoot) {
         return true; // Allow all users to access the root path
@@ -16,7 +16,7 @@ export const authConfig = {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users trying to access the dashboard to the login page
       } else if (isLoggedIn) {
-        return Response.redirect(new URL('/dashboard', nextUrl));
+        return Response.redirect(new URL("/dashboard", nextUrl));
       }
       return false; // Redirect all other unauthenticated users to the login page
     },

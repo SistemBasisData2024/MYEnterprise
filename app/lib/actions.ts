@@ -50,14 +50,13 @@ export async function createInvoice(prevState: State, formData: FormData) {
   }
 
   const { customerId, amount, status } = validatedFields.data; //Prepare data for insetion into database.
-  const amountInCents = amount * 100;
   const date = new Date().toISOString().split("T")[0];
 
   try {
     //Insert data into the database.
     await sql`
         INSERT INTO invoices (customer_id, amount, status, date)
-        VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+        VALUES (${customerId}, ${amount}, ${status}, ${date})
     `;
   } catch (error) {
     //If database error occurs, return a more specific error.
@@ -87,12 +86,11 @@ export async function updateInvoice(
     };
   }
   const { customerId, amount, status } = validatedFields.data;
-  const amountInCents = amount * 100;
 
   try {
     await sql`
         UPDATE invoices
-        SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+        SET customer_id = ${customerId}, amount = ${amount}, status = ${status}
         WHERE id = ${id}
         `;
   } catch (error) {
