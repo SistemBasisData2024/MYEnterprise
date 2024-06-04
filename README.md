@@ -33,11 +33,11 @@ UML
 
 ERD
 
-<!-- Insert ERD Diagram Here -->
+![ERD Diagram](./documentation/Entity%20Relationship%20Diagram.svg)
 
 Flowchart
 
-<!-- Insert Flowchart Here -->
+![Flowchart](./documentation/Flowchart.svg)
 
 # :computer: Installation Guide
 
@@ -57,7 +57,9 @@ git clone https://github.com/SistemBasisData2024/MYEnterprise.git
 npm install
 ```
 
-- Create an .env file in your project root folder and add your variables.
+- See the `.env.template` file in your project root folder and fill in the details used in the file.
+
+- Rename the file to `.env`.
 
 - Insert Database Variables
 
@@ -77,4 +79,4 @@ Then open [http://localhost:3000](http://localhost:3000) with your browser to st
 
 # 💻 Progress Report:
 
-<!-- Insert Progress Report Here -->
+![Progress Report 1](./documentation/ProgressReport1.png)
