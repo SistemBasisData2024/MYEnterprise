@@ -33,11 +33,11 @@ UML
 
 ERD
 
-![ERD Diagram](https://github.com/SistemBasisData2024/MYEnterprise/documentation/Entity%20Relationship%20Diagram.svg)
+![image](https://github.com/SistemBasisData2024/MYEnterprise/documentation/Entity%20Relationship%20Diagram.svg)
 
 Flowchart
 
-![Flowchart](https://github.com/SistemBasisData2024/MYEnterprise/documentation/Flowchart.svg)
+![image](https://github.com/SistemBasisData2024/MYEnterprise/documentation/Flowchart.svg)
 
 # :computer: Installation Guide
 
@@ -79,4 +79,4 @@ Then open [http://localhost:3000](http://localhost:3000) with your browser to st
 
 # 💻 Progress Report:
 
-![Progress Report 1](https://github.com/SistemBasisData2024/MYEnterprise/documentation/ProgressReport1.png)
+![image](https://github.com/SistemBasisData2024/MYEnterprise/documentation/ProgressReport1.png)
