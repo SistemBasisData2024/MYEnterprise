@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import MYEnterpriseLogo from "@/app/ui/myenterprise-logo";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
+  title: "MYEnterprise",
 };
 
 export default function Page() {
