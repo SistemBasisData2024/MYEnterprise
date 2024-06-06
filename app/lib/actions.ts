@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import { auth } from "@/auth";
 
 const FormSchema = z.object({
   id: z.string(),
@@ -51,12 +52,21 @@ export async function createInvoice(prevState: State, formData: FormData) {
 
   const { customerId, amount, status } = validatedFields.data; //Prepare data for insetion into database.
   const date = new Date().toISOString().split("T")[0];
+  const session = await auth();
+  const employee = session?.user?.id;
+  const { rows } = await sql`
+    SELECT company_id
+    FROM employee
+    WHERE id = ${employee}
+  `;
+
+  const companyId = rows[0]?.company_id;
 
   try {
     //Insert data into the database.
     await sql`
-        INSERT INTO invoices (customer_id, amount, status, date, employee_id)
-        VALUES (${customerId}, ${amount}, ${status}, ${date});
+        INSERT INTO invoices (customer_id, amount, status, date, employee_id, company_id)
+        VALUES (${customerId}, ${amount}, ${status}, ${date}, ${employee}, ${companyId});
     `;
   } catch (error) {
     //If database error occurs, return a more specific error.
