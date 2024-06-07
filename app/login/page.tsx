@@ -1,3 +1,4 @@
+import Link from "next/link";
 import LoginForm from "@/app/ui/login-form";
 import { Metadata } from "next";
 import MYEnterpriseLogo from "../ui/myenterprise-logo";
@@ -16,6 +17,9 @@ export default function LoginPage() {
           </div>
         </div>
         <LoginForm />
+        <Link href="/">
+          <button>Cancel</button>
+        </Link>
       </div>
     </main>
   );
