@@ -10,6 +10,7 @@ import {
 } from "./definitions";
 import { formatCurrency } from "./utils";
 import { unstable_noStore as noStore } from "next/cache";
+import redis from "./redis";
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -144,6 +145,13 @@ export async function fetchInvoicesPages(query: string) {
 export async function fetchInvoiceById(id: string) {
   noStore();
   try {
+    // Try to get the invoice from Redis cache first
+    const cachedInvoice = await redis.get(`invoice:${id}`);
+    if (cachedInvoice) {
+      console.log("Invoice fetched from cache");
+      return JSON.parse(cachedInvoice);
+    }
+
     const data = await sql<InvoiceForm>`
       SELECT
         invoices.id,
@@ -156,9 +164,13 @@ export async function fetchInvoiceById(id: string) {
 
     const invoice = data.rows.map((invoice) => ({
       ...invoice,
-      // Convert amount from cents to dollars
-      amount: invoice.amount / 100,
     }));
+
+    // If invoice is not in cache and is fetched from database, store it in cache
+    if (invoice[0]) {
+      console.log("Invoice fetched from database and stored in cache");
+      await redis.set(`invoice:${id}`, JSON.stringify(invoice[0]));
+    }
 
     console.log(invoice); //Invoice is in an empty array[]
     return invoice[0];
