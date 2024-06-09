@@ -1,9 +1,9 @@
+
 export type User = {
   id: string;
   name: string;
   email: string;
   password: string;
-  company_id: string;
 };
 
 export type Customer = {
@@ -72,6 +72,8 @@ export type FormattedCustomersTable = {
 export type CustomerField = {
   id: string;
   name: string;
+  email: string;
+  phone_number: string;
 };
 
 export type InvoiceForm = {

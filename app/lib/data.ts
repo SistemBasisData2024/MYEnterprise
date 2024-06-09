@@ -1,22 +1,11 @@
+
 import { sql } from "@vercel/postgres";
-import {
-  CustomerField,
-  CustomersTableType,
-  InvoiceForm,
-  InvoicesTable,
-  LatestInvoiceRaw,
-  User,
-  Revenue,
-} from "./definitions";
+import { CustomerField, Revenue, LatestInvoiceRaw, CustomersTableType, InvoiceForm, User, InvoicesTable } from "./definitions";
 import { formatCurrency } from "./utils";
 import { unstable_noStore as noStore } from "next/cache";
-import redis from "./redis";
 
 export async function fetchRevenue() {
-  // Add noStore() here to prevent the response from being cached.
-  // This is equivalent to in fetch(..., {cache: 'no-store'}).
   noStore();
-
   try {
     const data = await sql<Revenue>`SELECT * FROM revenue`;
     return data.rows;
@@ -50,9 +39,6 @@ export async function fetchLatestInvoices() {
 export async function fetchCardData() {
   noStore();
   try {
-    // You can probably combine these into a single SQL query
-    // However, we are intentionally splitting them to demonstrate
-    // how to initialize multiple queries in parallel with JS.
     const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const invoiceStatusPromise = sql`SELECT
@@ -84,10 +70,7 @@ export async function fetchCardData() {
 }
 
 const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(
-  query: string,
-  currentPage: number
-) {
+export async function fetchFilteredInvoices(query: string, currentPage: number) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
@@ -145,13 +128,6 @@ export async function fetchInvoicesPages(query: string) {
 export async function fetchInvoiceById(id: string) {
   noStore();
   try {
-    // Try to get the invoice from Redis cache first
-    const cachedInvoice = await redis.get(`invoice:${id}`);
-    if (cachedInvoice) {
-      console.log("Invoice fetched from cache");
-      return JSON.parse(cachedInvoice);
-    }
-
     const data = await sql<InvoiceForm>`
       SELECT
         invoices.id,
@@ -164,13 +140,8 @@ export async function fetchInvoiceById(id: string) {
 
     const invoice = data.rows.map((invoice) => ({
       ...invoice,
+      amount: invoice.amount / 100,
     }));
-
-    // If invoice is not in cache and is fetched from database, store it in cache
-    if (invoice[0]) {
-      console.log("Invoice fetched from database and stored in cache");
-      await redis.set(`invoice:${id}`, JSON.stringify(invoice[0]));
-    }
 
     console.log(invoice); //Invoice is in an empty array[]
     return invoice[0];
@@ -180,45 +151,41 @@ export async function fetchInvoiceById(id: string) {
   }
 }
 
-export async function fetchCustomers() {
-  noStore();
+export async function fetchCustomers(): Promise<any> {
   try {
-    const data = await sql<CustomerField>`
-      SELECT
-        id,
-        name
-      FROM customers
-      ORDER BY name ASC
-    `;
-
-    const customers = data.rows;
-    return customers;
-  } catch (err) {
-    console.error("Database Error:", err);
-    throw new Error("Failed to fetch all customers.");
+    const response = await fetch('/api/customers');
+    if (!response.ok) {
+      throw new Error('Failed to fetch customers');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+    throw error;
   }
 }
+
 
 export async function fetchFilteredCustomers(query: string) {
   noStore();
   try {
     const data = await sql<CustomersTableType>`
-		SELECT
-		  customers.id,
-		  customers.name,
-		  customers.email,
-		  customers.image_url,
-		  COUNT(invoices.id) AS total_invoices,
-		  SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
-		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
-		FROM customers
-		LEFT JOIN invoices ON customers.id = invoices.customer_id
-		WHERE
-		  customers.name ILIKE ${`%${query}%`} OR
+      SELECT
+        customers.id,
+        customers.name,
+        customers.email,
+        customers.image_url,
+        COUNT(invoices.id) AS total_invoices,
+        SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
+        SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
+      FROM customers
+      LEFT JOIN invoices ON customers.id = invoices.customer_id
+      WHERE
+        customers.name ILIKE ${`%${query}%`} OR
         customers.email ILIKE ${`%${query}%`}
-		GROUP BY customers.id, customers.name, customers.email, customers.image_url
-		ORDER BY customers.name ASC
-	  `;
+      GROUP BY customers.id, customers.name, customers.email, customers.image_url
+      ORDER BY customers.name ASC
+    `;
 
     const customers = data.rows.map((customer) => ({
       ...customer,
