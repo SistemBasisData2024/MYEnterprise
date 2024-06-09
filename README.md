@@ -1,6 +1,6 @@
 # MYEnterprise
 
-![MYEnterprise Header](https://raw.githubusercontent.com/SistemBasisData2024/MYEnterprise/public/open.png)
+![MYEnterprise Header](https://raw.githubusercontent.com/SistemBasisData2024/MYEnterprise/main/public/open.png)
 
 The "MYEnterprise" project is an Enterprise Resource Planning (ERP) application designed to help organizations manage their resources and daily operations. The system consists of four main features:
 
