@@ -24,7 +24,7 @@ const links = [
   { name: "Customers", href: "/dashboard/customers", icon: UserGroupIcon },
   { name: "Inventory", href: "/dashboard/inventory", icon: TruckIcon },
   { name: "Employee", href: "/dashboard/employee", icon: UsersIcon },
-  { name: "Project", href: "/dashboard/project", icon: TableCellsIcon },
+  { name: "Project", href: "/dashboard/projects", icon: TableCellsIcon },
 ];
 
 export default function NavLinks() {
