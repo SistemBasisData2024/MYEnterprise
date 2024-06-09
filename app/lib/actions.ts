@@ -8,6 +8,7 @@ import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { auth } from "@/auth";
 import redis from "./redis";
+import { CustomerField } from "@/app/lib/definitions";
 
 const FormSchema = z.object({
   id: z.string(),
@@ -141,4 +142,48 @@ export async function authenticate(
     }
     throw error;
   }
+}
+
+export async function fetchCustomers(): Promise<CustomerField[]> {
+  const session = await auth();
+  const employee = session?.user?.email;
+  console.log(employee);
+  console.log(session);
+  const { rows } = await sql`
+    SELECT company_id
+    FROM employee
+    WHERE email = ${employee}
+  `;
+
+  const companyId = rows[0]?.company_id;
+  console.log(companyId);
+  try {
+    const { rows } = await sql`
+      SELECT id, name, email, phone_number
+      FROM customers
+      WHERE company_id = ${companyId}
+    `;
+
+    return rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      email: row.email,
+      phone_number: row.phone_number,
+    }));
+    console.log(rows);
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+    throw new Error('Failed to fetch customers');
+  }
+}
+
+export async function deletecustomers(id: string) {
+  try {
+    await sql`DELETE FROM customers WHERE id = ${id}`;
+  } catch (error) {
+    console.log(error);
+    return { message: "Database Error : Failed to Delete Invoice" };
+  }
+
+  revalidatePath("dashboard/customers");
 }
