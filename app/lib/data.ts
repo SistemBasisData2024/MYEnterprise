@@ -10,7 +10,6 @@ import {
 } from "./definitions";
 import { formatCurrency } from "./utils";
 import { unstable_noStore as noStore } from "next/cache";
-import axios from "axios";
 import redis from "./redis";
 
 export async function fetchRevenue() {
@@ -175,7 +174,8 @@ export async function fetchInvoiceById(id: string) {
   }
 }
 
-export async function fetchCustomers(): Promise<any> {
+export async function fetchCustomers() {
+  noStore(); //Add noStore for dynamic rendering - Chapter 8
   try {
     const data = await sql<CustomerField>`
       SELECT

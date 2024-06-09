@@ -103,8 +103,6 @@ export async function updateInvoice(
         SET customer_id = ${customerId}, amount = ${amount}, status = ${status}
         WHERE id = ${id}
         `;
-
-    const updatedInvoice = { customerId, amount, status };
     await redis.del(`invoice:${id}`);
   } catch (error) {
     console.log(error);
