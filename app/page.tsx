@@ -32,7 +32,20 @@ export default function Page() {
           </Link>
         </div>
         <div className="flex items-center justify-center p-6 md:w-1/2 md:px-28 md:py-12">
-          {/* Add Hero Images Here */}
+          <Image
+            src="/hero-desktop.png"
+            alt="Screenshots of the dashboard project showing desktop version"
+            width={1000}
+            height={760}
+            className="hidden md:block"
+          />
+          <Image
+            src="/hero-mobile.png"
+            alt="Screenshots of the dashboard project showing mobile version"
+            width={560}
+            height={620}
+            className="block md:hidden"
+          />
         </div>
       </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
