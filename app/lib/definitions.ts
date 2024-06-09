@@ -1,9 +1,9 @@
-
 export type User = {
   id: string;
   name: string;
   email: string;
   password: string;
+  company_id: string;
 };
 
 export type Customer = {

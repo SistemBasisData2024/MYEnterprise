@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { auth } from "@/auth";
+import redis from "./redis";
 
 const FormSchema = z.object({
   id: z.string(),
@@ -84,7 +85,7 @@ export async function updateInvoice(
   formData: FormData
 ) {
   const validatedFields = UpdateInvoice.safeParse({
-    customerId: formData.get("customerId"),
+    customerId: formData.get("customer_id"),
     amount: formData.get("amount"),
     status: formData.get("status"),
   });
@@ -96,13 +97,15 @@ export async function updateInvoice(
     };
   }
   const { customerId, amount, status } = validatedFields.data;
-
   try {
     await sql`
         UPDATE invoices
         SET customer_id = ${customerId}, amount = ${amount}, status = ${status}
         WHERE id = ${id}
         `;
+
+    const updatedInvoice = { customerId, amount, status };
+    await redis.del(`invoice:${id}`);
   } catch (error) {
     console.log(error);
     return { message: "Database Error : Failed to Update Invoice" };

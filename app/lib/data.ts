@@ -1,8 +1,17 @@
-
 import { sql } from "@vercel/postgres";
-import { CustomerField, Revenue, LatestInvoiceRaw, CustomersTableType, InvoiceForm, User, InvoicesTable } from "./definitions";
+import {
+  CustomerField,
+  Revenue,
+  LatestInvoiceRaw,
+  CustomersTableType,
+  InvoiceForm,
+  User,
+  InvoicesTable,
+} from "./definitions";
 import { formatCurrency } from "./utils";
 import { unstable_noStore as noStore } from "next/cache";
+import axios from "axios";
+import redis from "./redis";
 
 export async function fetchRevenue() {
   noStore();
@@ -70,7 +79,10 @@ export async function fetchCardData() {
 }
 
 const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(query: string, currentPage: number) {
+export async function fetchFilteredInvoices(
+  query: string,
+  currentPage: number
+) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
@@ -128,6 +140,13 @@ export async function fetchInvoicesPages(query: string) {
 export async function fetchInvoiceById(id: string) {
   noStore();
   try {
+    // Try to get the invoice from Redis cache first
+    const cachedInvoice = await redis.get(`invoice:${id}`);
+    if (cachedInvoice) {
+      console.log("Invoice fetched from cache");
+      return JSON.parse(cachedInvoice);
+    }
+
     const data = await sql<InvoiceForm>`
       SELECT
         invoices.id,
@@ -140,8 +159,13 @@ export async function fetchInvoiceById(id: string) {
 
     const invoice = data.rows.map((invoice) => ({
       ...invoice,
-      amount: invoice.amount / 100,
     }));
+
+    // If invoice is not in cache and is fetched from database, store it in cache
+    if (invoice[0]) {
+      console.log("Invoice fetched from database and stored in cache");
+      await redis.set(`invoice:${id}`, JSON.stringify(invoice[0]));
+    }
 
     console.log(invoice); //Invoice is in an empty array[]
     return invoice[0];
@@ -153,18 +177,21 @@ export async function fetchInvoiceById(id: string) {
 
 export async function fetchCustomers(): Promise<any> {
   try {
-    const response = await fetch('/api/customers');
-    if (!response.ok) {
-      throw new Error('Failed to fetch customers');
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching customers:', error);
-    throw error;
+    const data = await sql<CustomerField>`
+      SELECT
+        id,
+        name
+      FROM customers
+      ORDER BY name ASC
+    `;
+
+    const customers = data.rows;
+    return customers;
+  } catch (err) {
+    console.error("Database Error:", err);
+    throw new Error("Failed to fetch all customers.");
   }
 }
-
 
 export async function fetchFilteredCustomers(query: string) {
   noStore();
